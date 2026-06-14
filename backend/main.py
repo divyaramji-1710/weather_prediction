@@ -1,7 +1,29 @@
+# backend/main.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from backend.routers import weather
 
-app = FastAPI()
+app = FastAPI(
+    title='Weather App API',
+    description='FastAPI backend for the React weather app',
+    version='1.0.0',
+)
 
-@app.get("/")
+# ─────────────────────────────────────────────────────
+# CORS — allows the React dev server to call this API
+# ─────────────────────────────────────────────────────
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:5173'],  # Vite default port
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
+
+# Register routers
+app.include_router(weather.router)
+
+@app.get('/')
 async def root():
-    return {"message": "API running"}
+    return {'message': 'Weather App API is running'}
+
