@@ -4,10 +4,11 @@ import requests
 import os
 import pandas as pd
 from datetime import datetime
-from dotenv import load_dotenv
-
-# Load .env file if it exists
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 # Setup Page Configuration
 st.set_page_config(
@@ -55,15 +56,23 @@ st.markdown("""
 # Sidebar configurations
 st.sidebar.title("🌤️ Aether Settings")
 
-# Retrieve API Key from .env or sidebar text input
+# Retrieve API Key from environment or Streamlit secrets
 api_key = os.getenv("OPENWEATHER_API_KEY")
+if not api_key:
+    try:
+        if "OPENWEATHER_API_KEY" in st.secrets:
+            api_key = st.secrets["OPENWEATHER_API_KEY"]
+    except Exception:
+        pass
+
+# If not set in env or secrets, prompt user in the sidebar
 if not api_key:
     api_key = st.sidebar.text_input("Enter OpenWeatherMap API Key:", type="password")
     if not api_key:
-        st.info("🔑 Please configure your `OPENWEATHER_API_KEY` in the `.env` file or enter it in the sidebar to fetch weather data.")
+        st.info("🔑 Please configure your `OPENWEATHER_API_KEY` in Streamlit Secrets, local `.env` file, or enter it in the sidebar.")
         st.stop()
 else:
-    st.sidebar.success("✅ API Key loaded from .env")
+    st.sidebar.success("✅ API Key loaded successfully")
 
 # Unit and City selections
 units = st.sidebar.radio("Temperature Units:", ["Metric (°C)", "Imperial (°F)"])
