@@ -27,6 +27,9 @@ class CurrentWeatherResponse(BaseModel):
     wind: Wind
     visibility: Optional[int] = None
     dt: int  # Unix timestamp
+    sunrise: Optional[int] = None
+    sunset: Optional[int] = None
+    timezone: Optional[int] = None
 
 class ForecastItem(BaseModel):
     dt: int
@@ -38,4 +41,6 @@ class ForecastItem(BaseModel):
 class ForecastResponse(BaseModel):
     city: str
     country: str
+    timezone: Optional[int] = None
     items: List[ForecastItem]
+

@@ -34,6 +34,9 @@ async def get_current_weather(city: str, units: str = 'metric') -> CurrentWeathe
         wind=data['wind'],
         visibility=data.get('visibility'),
         dt=data['dt'],
+        sunrise=data.get('sys', {}).get('sunrise'),
+        sunset=data.get('sys', {}).get('sunset'),
+        timezone=data.get('timezone'),
     )
 
 # ─────────────────────────────────────────────────────
@@ -52,5 +55,7 @@ async def get_forecast(city: str, units: str = 'metric') -> ForecastResponse:
     return ForecastResponse(
         city=data['city']['name'],
         country=data['city']['country'],
+        timezone=data['city'].get('timezone'),
         items=data['list'],
     )
+
