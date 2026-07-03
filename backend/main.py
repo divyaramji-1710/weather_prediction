@@ -14,8 +14,8 @@ app = FastAPI(
 # ─────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:5173'],  # Vite default port
-    allow_credentials=True,
+    allow_origins=['*'],  # Allow any origin (e.g. Vercel, localhost)
+    allow_credentials=False,
     allow_methods=['*'],
     allow_headers=['*'],
 )
